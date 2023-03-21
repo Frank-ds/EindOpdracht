@@ -13,15 +13,14 @@ format:
 
 Hyster-Yale is a leading global manufacturer of materials handling equipment and services. Founded in 1929, Hyster-Yale has grown to become one of the largest and most respected names in the industry. In its development center in Nijmegen, The Netherlands Heavy-Duty lifting trucks (Big truck) are developed. As part of its commitment to sustainability, Hyster-Yale has started developing a comprehensive program for electrifying its trucks.
 
-Electric trucks carry less potential energy with them then the conventional ICE trucks.
-For example, a 16 tons fork lift has a diesel tank of 206 L which is roughly 2060 KWh, the electric variant has maximum 4 battery packs of 70KWh, which gives the truck a maximum capacity of 280 Kwh.
+Electric trucks carry less potential energy with them then the conventional ICE trucks. For example, a 16 tons fork lift has a diesel tank of 206 L which is roughly 2060 KWh, the electric variant has maximum 4 battery packs of 70KWh, which gives the truck a maximum capacity of 280 Kwh.
 
 Because a customer ideally doesn't want to adjust his operation, Hyster-Yale is searching where to improve efficiency. A full electric truck already has a efficiency between 85 and 95 %. This raises the question wat the impact off the operator is on the overall energy usage.
 
-## Problem definition 
+## Problem definition
 
 In the automotive industry gamification is used to make the operator aware of his energy behavior, and motivate the operator to drive more efficient.
 
 Business question: What is the effect of the operator on the overall energy usage of the truck?
 
-The term operator inputs are in this project limmeted to accelerator pedal which is the input for accelerate the  truck,  and hoist-lever which is used for lifting/acellerating the load vertically. 
+The term operator inputs are in this project limited to accelerator pedal which is the input for accelerate the truck, and hoist-lever which is used for lifting/accelerating the load vertically.
