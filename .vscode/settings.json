@@ -1,0 +1,12 @@
+{
+    "jupyter.kernels.filter": [
+        {
+            "path": "c:\\Users\\enfmeske\\AppData\\Local\\Microsoft\\WindowsApps\\python3.10.exe",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "c:\\Users\\enfmeske\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+            "type": "pythonEnvironment"
+        }
+    ]
+}
