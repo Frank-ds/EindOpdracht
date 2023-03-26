@@ -73,20 +73,76 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="business-objectives" class="level1">
-<h1>Business Objectives</h1>
-<section id="hyster-yale" class="level2">
-<h2 class="anchored" data-anchor-id="hyster-yale">Hyster-Yale</h2>
+<section id="business-understanding" class="level1">
+<h1>Business understanding</h1>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
 <p>Hyster-Yale is a leading global manufacturer of materials handling equipment and services. Founded in 1929, Hyster-Yale has grown to become one of the largest and most respected names in the industry. In its development center in Nijmegen, The Netherlands Heavy-Duty lifting trucks (Big truck) are developed. As part of its commitment to sustainability, Hyster-Yale has started developing a comprehensive program for electrifying its trucks.</p>
+</section>
+<section id="business-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="business-objectives">Business objectives</h2>
 <p>Electric trucks carry less potential energy with them then the conventional ICE trucks. For example, a 16 tons fork lift has a diesel tank of 206 L which is roughly 2060 KWh, the electric variant has maximum 4 battery packs of 70KWh, which gives the truck a maximum capacity of 280 Kwh.</p>
-<p>Because a customer ideally doesn’t want to adjust his operation, Hyster-Yale is searching where to improve efficiency. A full electric truck already has a efficiency between 85 and 95 %. This raises the question wat the impact off the operator is on the overall energy usage.</p>
+<p>Because a customer ideally doesn’t want to adjust his operation, Hyster-Yale is searching ways to improve efficiency. A full electric truck already has a efficiency between 85 and 95 %. This raises the question what the impact off the operator is on the overall energy usage. In the automotive industry gamification is used to make the operator aware of his energy behavior, and motivate the operator to drive more efficient.</p>
+<p>Business objective : What is the spread of operator efficiency on the overall energy usage of the truck?</p>
+<p>The term operator efficiency in this project is limited to accelerator pedal which is the input for accelerate the truck, and hoist-lever which is used for lifting/accelerating the load vertically.</p>
 </section>
-<section id="problem-definition" class="level2">
-<h2 class="anchored" data-anchor-id="problem-definition">Problem definition</h2>
-<p>In the automotive industry gamification is used to make the operator aware of his energy behavior, and motivate the operator to drive more efficient.</p>
-<p>Business question: What is the effect of the operator on the overall energy usage of the truck?</p>
-<p>The term operator inputs are in this project limited to accelerator pedal which is the input for accelerate the truck, and hoist-lever which is used for lifting/accelerating the load vertically.</p>
+<section id="business-success-criteria" class="level2">
+<h2 class="anchored" data-anchor-id="business-success-criteria">Business success criteria</h2>
 </section>
+<section id="assess-situation" class="level2">
+<h2 class="anchored" data-anchor-id="assess-situation">Assess situation</h2>
+</section>
+<section id="data-mining-goals" class="level2">
+<h2 class="anchored" data-anchor-id="data-mining-goals">Data mining goals</h2>
+</section>
+<section id="produce-project-plan" class="level2">
+<h2 class="anchored" data-anchor-id="produce-project-plan">Produce project plan</h2>
+</section>
+</section>
+<section id="data-understanding" class="level1">
+<h1>Data understanding</h1>
+<p>For this project truck data is used which is collected by a data logger installed on the truck. The data of this project is from a Hyster Empty container handler. <img src="Hyster_ECH.jpg" class="img-fluid" alt="Hyster_ECH"></p>
+<p>The data logger is recording in mdf4 format, which is a data logging standard. The data recorded is timeseries data with a frequency range of 1 to 100 Hz. there are around the 500 signals recorded, but for this project the signals are limited to the signals the operator control, and the output these inputs will give.</p>
+<ul>
+<li>Signals:
+<ul>
+<li>Lift_Height: RAW height of the spreader [mm] has to be multiplied by 2 to get the correct value<br>
+</li>
+<li>Vehicle_speed: Speed of the truck [km/h] Engine_Speed Engine rpm [rpm]</li>
+<li>AccelPedalPos Accelerator pedal [%] 0 no throttle, 100 is wide open throttle</li>
+<li>Hoist_Percentage Percentage of Hoist lever (or joystick) Engine_Actual_Torq Engine gross torque [%]</li>
+<li>EngPercLoadAtCurrSp Engine load [%]</li>
+<li>NomFrictionPercTorq Torque loss of engine [%]</li>
+<li>FuelRate Diesel used [l/hour]</li>
+<li>Lift_pressure_raw Pressure in hydraulic lift circuit [bar]</li>
+<li>Brake_pressure_raw Pressure in Hydraulic brake circuit [bar]</li>
+<li>lat Latitude from GPS [°]</li>
+<li>lon Longitude from GPS [°]</li>
+<li>Lift_Status Boolean Lift status</li>
+<li>Lower_Status Boolean Lower status</li>
+<li>Tilt_Fwd Boolean Tilt FWD status</li>
+<li>Tilt_Bwd Boolean Tilt BWD status</li>
+<li>PPS_Bwd Boolean PPS BWD status</li>
+<li>PPS_Fwd Boolean PPS FWD status</li>
+<li>Spr_Extend Boolean Spreader extend status</li>
+<li>Spr_Retract Boolean Spreader retract status</li>
+<li>SS_Left Boolean SideShift left status</li>
+<li>SS_Right Boolean SideShift Right status</li>
+<li>TWL_Unlock Boolean Twistlock unlock status</li>
+<li>TWL_Lock Boolean Twistlock lock status</li>
+</ul></li>
+</ul>
+<p>A small explanation about a empty container handler (ECH). A empty container handler is a lift truck with a modified front end. Most of the times the mast is longer then a similar lift truck, upt 18 m fully extended. The biggest difference with a ‘standard’ lift truck is that instead of forks a spreader is mounted in the mast. The spreader function is picking containers. Functions on a ECH: Lifting/ lowering –&gt; move the load vertically. Tilting FWD/BWD –&gt; inclining the mast for maneuvering the spreader and shifting the load moment. Power Pile Slope –&gt; inclinate the spreader for maneuvering the spreader on the container. Spreader extend/retract –&gt; It need to pick up 20 ft aswell as 40 ft containers, on picture above the spreader is extended.<br>
+Side Shift left/right –&gt; possibility to shift the spreader to the left or right for maneuvering on the container TwistLock lock/unlock –&gt; Twislocks are used to lock unlock containers</p>
+</section>
+<section id="data-preparation" class="level1">
+<h1>Data preparation</h1>
+</section>
+<section id="modeling" class="level1">
+<h1>Modeling</h1>
+</section>
+<section id="evaluation" class="level1">
+<h1>Evaluation</h1>
 </section>
 
 </main>
