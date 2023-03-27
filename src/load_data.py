@@ -93,4 +93,4 @@ mdf = MDF(settings.file_path)
 if __name__ == "__main__":
     # for file in settings.data_raw_dir.glob("*"):
     #     f_name = file.name.split("_")[2]
-    print("done")
+    print("Data loading module not intended as main")
