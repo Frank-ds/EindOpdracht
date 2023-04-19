@@ -14,7 +14,7 @@ load_data.load_input(DATA_RAW_DIR, DATA_LOADED_DIR)
 preprocess.merge_pickles(DATA_LOADED_DIR, COMBI_FILE)
 
 preprocess.preprocess()
-
+print("preproces done")
 
 if __name__ == "__main__":
     print("Main done")
