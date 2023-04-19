@@ -1,73 +1,740 @@
 ---
 title: "Capstone project"
 author: "Frank Meskes"
-date: "March 20th, 2023"
+date: "03,20,2023"
 format:
   html:
     code-fold: true
+toc: true
+toc-depth: 2
+toc-location: left
+# | style="text-align": center
 ---
 
 # Business understanding
+
+![Hyster_ECH](Hyster_ECH.jpg)
 
 ## Background
 
 Hyster-Yale is a leading global manufacturer of materials handling equipment and services. Founded in 1929, Hyster-Yale has grown to become one of the largest and most respected names in the industry. In its development center in Nijmegen, The Netherlands Heavy-Duty lifting trucks (Big truck) are developed. As part of its commitment to sustainability, Hyster-Yale has started developing a comprehensive program for electrifying its trucks.
 
+The goal is to electrify the complete big truck range before the end of 2023. Electric trucks carry less potential energy with them then the conventional ICE trucks. For some trucks it is only 15 % of the capacity of the ICE variant. Because a customer ideally doesn't want to adjust his operation, Hyster-Yale is searching ways to improve efficiency. A full electric truck already has a efficiency between 85 and 95 %. This raises the question if gamification is a viable option to improve the overall energy usage. Gamification is the application of game design elements, such as competition, rewards, and challenges, to non-game contexts, such as business, education, or in this case lift trucks. To increase engagement, motivation, performance and decrease energy usages. In the automotive industry gamification is used to make the operator aware of his energy behavior, and motivate the operator to drive more efficient.
+
+For this assignment data is used from a diesel truck, because there isn't enough field data from electrical trucks available at the moment.
+
 ## Business objectives
 
-Electric trucks carry less potential energy with them then the conventional ICE trucks. For example, a 16 tons fork lift has a diesel tank of 206 L which is roughly 2060 KWh, the electric variant has maximum 4 battery packs of 70KWh, which gives the truck a maximum capacity of 280 Kwh.
+Can the implementation of a gamification strategy on a empty container handler lead to a reduction in energy usage?
 
-Because a customer ideally doesn't want to adjust his operation, Hyster-Yale is searching ways to improve efficiency. A full electric truck already has a efficiency between 85 and 95 %. This raises the question what the impact off the operator is on the overall energy usage. In the automotive industry gamification is used to make the operator aware of his energy behavior, and motivate the operator to drive more efficient.
+This is an investigation of where there are area's to reduce energy usage, and has not the implementation of gamification as a goal.
 
-Business objective : What is the spread of operator efficiency on the overall energy usage of the truck?
+The business objective can be divided in three sub questions:
 
-The term operator efficiency in this project is limited to accelerator pedal which is the input for accelerate the truck, and hoist-lever which is used for lifting/accelerating the load vertically.
+1.  What are the key areas of energy consumption in a truck, and which signals have the strongest impact on energy consumption?
+
+    Before identifying areas for energy reduction, it is essential to determine the primary energy consumers. The report focuses on the main truck states: idle, truck driving, hydraulic usage, and working.
+
+2.  What is the correlation between different signals and the energy usage of each system?
+
+    Investigating the relationship between various signals and energy usage in each system. By analyzing the correlation between different signals and energy consumption, the study aims to determine which signals have the strongest impact on energy usage.
+
+3.  How can energy usage be optimized to reduce consumption and improve efficiency?
 
 ## Business success criteria
 
-## Assess situation
+The success of an investigation into whether gamification is a viable option to reduce energy usage on lift trucks can be evaluated using the following business success criteria:
+
+1.  What are the main energy consumers?
+
+    The investigation will aim to identify and measure the energy consumption of systems within the scope of the investigation, with the goal of determining the top energy consumers.
+
+2.  What is the correlation between different signals and the energy usage of each system, and which signals have the strongest impact on energy consumption?
+
+    The successful completion of this research project will be demonstrated by the identification of the signals that have the strongest correlation with energy usage in each system.
+
+3.  How can energy usage be optimized to reduce consumption and improve efficiency by 3%?
+
+    The results should provide actionable insights that can be used to reduce energy costs with 3% and improve efficiency.
+
+# Assess situation
+
+## Inventory of resources
+
+This investigation into energy consumption on a ECH truck utilizes the following resources:
+
+#### Data logger
+
+The data logger is a device installed on the trucks that collects data from various sensors and controllers which is send over the CAN-bus. The data logger captures data related to energy consumption, such as motor speed, lifted load, and fuel consumption.
+
+#### Data storage
+
+The 2 weeks of data collected from the truck totals approximately 5.9 GB in size. The data is stored on a secure server for analysis and processing.
+
+#### Analysis tools
+
+The investigation main analysis tool to process and analyze the large amount of data collected is Python. This tool is used to clean, preprocess, and analyze the data to identify patterns and insights related to energy consumption.
+
+#### Human resources
+
+The investigation is being conducted by a single person, who is responsible for managing all aspects of the investigation, including data collection, analysis, and reporting.
+
+## Risks and contingencies
+
+This investigation faces several risks, which may impact the success of the investigation.
+
+#### Data quality
+
+The quality of the data collected from the data logger. Poor data quality can lead to inaccurate analysis and conclusions, which may impact the effectiveness of any energy reduction measures implemented.
+
+#### Scope creep
+
+If the project scope is not well-defined at the outset, or if the scope expands beyond what is feasible within the given timeline and budget, the project may become unmanageable and fail to deliver meaningful results.
+
+#### Time constraints
+
+The investigation has a limited time frame, and any delays or issues may impact the ability to meet project deadlines.
+
+#### Resource constraints
+
+If the project team does not have the necessary resources (e.g. tools, software, expertise) to execute the project effectively, the project may be delayed or produce low-quality results
+
+## Terminology
+
+To ensure clarity and consistency, the following terms and definitions will be used:
+
+See attachment Terminology.
+
+## Cost and Benefits
+
+This investigation into energy consumption on ECH trucks will involve some costs and potential benefits. In this chapter, we will explore the anticipated costs and benefits of the investigation.
+
+### Costs
+
+As this is a school assignment there are no cost except for the storing cost of the data.
+
+### Benefits
+
+The benefits of this investigation include:
+
+-   Cost Savings: By identifying opportunities to reduce energy consumption.
+
+-   Environmental Benefits: Reducing energy consumption can also lead to a reduction in greenhouse gas emissions, which can have a positive impact on the environment.
+
+-   Operational Improvements: The investigation may identify operational improvements that can lead to greater efficiency and productivity, as well as a reduction in maintenance costs.
 
 ## Data mining goals
 
+The primary goal of this investigation into energy consumption on ECH trucks is to identify patterns and relationships in the data that can be used to reduce energy consumption.
+
+By analyzing the data, our aim is to identify when and where energy is being consumed the most.
+
+The aim is to identify specific actions or conditions that can be optimized to reduce energy consumption
+
+By identifying these opportunities, we can help to reduce fuel or electricity costs for the ECH trucks, while also reducing greenhouse gas emissions and improving overall efficiency.
+
 ## Produce project plan
+
+The project plan for this investigation involves several key phases, including data collection, data cleaning and preparation, data analysis, model development, and implementation. The following is a breakdown of each phase of the project plan:
+
+### Phase 1: Data loading
+
+The first phase of the project plan involves collecting data from a AWS EC2 server. after this the mdf4 files will be loaded by the loaded.py library. This library will convert the mdf4 data to a pandas data-frame, filter the signals that are needed , downscale the data to 1 Hz, rename the signals to a more convenient name and export it as a df (pickle file).
+
+### Phase 2: Data Cleaning and Preparation
+
+In the second phase the preprocess.py module will be used to create new signals from existing, remove the data without RPM (the truck is then on ignition and has no power output),categorize the data into truck states and split the power per state.
+
+### Phase 3: Data Analysis
+
+The third phase of the project plan involves analyzing the data to identify patterns and relationships in energy consumption on the ECH trucks. This is for a big part a loop with the previous step. This is mainly done in Explore.ipynb
+
+### Phase 4: Implementation
+
+As this is an exploratory project there will be no real implementation on the physical trucks. However if the outcome of this project is that there could be an energy reduction of 3% or more, there will be a follow-up project on more trucks. 
 
 # Data understanding
 
-For this project truck data is used which is collected by a data logger installed on the truck. The data of this project is from a Hyster Empty container handler. ![Hyster_ECH](Hyster_ECH.jpg)
+To investigate energy consumption on ECH trucks, data was collected using sensors and data loggers. The data was collected over a period of two weeks from a ECH truck with an ICE engine, resulting in a total of approximately 5.9 GB of data. The choice to use an ICE truck instead of an electric truck is made because, the electric trucks are build but not yet deployed in the field with an appropriate maturity level.
 
-The data logger is recording in mdf4 format, which is a data logging standard. The data recorded is timeseries data with a frequency range of 1 to 100 Hz. there are around the 500 signals recorded, but for this project the signals are limited to the signals the operator control, and the output these inputs will give.
+## Collect Data
 
-* Signals: 
-  + Lift_Height: RAW height of the spreader \[mm\] has to be multiplied by 2 to get the correct value\
-  + Vehicle_speed: Speed of the truck \[km/h\] Engine_Speed Engine rpm \[rpm\] 
-  + AccelPedalPos Accelerator pedal \[%\] 0 no throttle, 100 is wide open throttle 
-  + Hoist_Percentage Percentage of Hoist lever (or joystick) Engine_Actual_Torq Engine gross torque \[%\] 
-  + EngPercLoadAtCurrSp Engine load \[%\] 
-  + NomFrictionPercTorq Torque loss of engine \[%\] 
-  + FuelRate Diesel used \[l/hour\] 
-  + Lift_pressure_raw Pressure in hydraulic lift circuit \[bar\] 
-  + Brake_pressure_raw Pressure in Hydraulic brake circuit \[bar\] 
-  + lat Latitude from GPS \[°\] 
-  + lon Longitude from GPS \[°\] 
-  + Lift_Status Boolean Lift status 
-  + Lower_Status Boolean Lower status 
-  + Tilt_Fwd Boolean Tilt FWD status 
-  + Tilt_Bwd Boolean Tilt BWD status 
-  + PPS_Bwd Boolean PPS BWD status 
-  + PPS_Fwd Boolean PPS FWD status 
-  + Spr_Extend Boolean Spreader extend status 
-  + Spr_Retract Boolean Spreader retract status 
-  + SS_Left Boolean SideShift left status 
-  + SS_Right Boolean SideShift Right status 
-  + TWL_Unlock Boolean Twistlock unlock status 
-  + TWL_Lock Boolean Twistlock lock status
-  
+The sensors and controllers on the truck are sending information to each other over the canbus, the datalogger which is installed on the ECH truck records this data. This data is then send to a AWS server over the air where the data is stored. the files are in .mf4 format which are mdf4 files. The mdf4 files that are used for this project are retrieved from the server. The logger produces files of 15 Mb, these files will be concatenated by a script that a colleague made to files of single days.
 
-A small explanation about a empty container handler (ECH). A empty container handler is a lift truck with a modified front end. Most of the times the mast is longer then a similar lift truck, upt 18 m fully extended. The biggest difference with a 'standard' lift truck is that instead of forks a spreader is mounted in the mast. The spreader function is picking containers. Functions on a ECH: Lifting/ lowering --\> move the load vertically. Tilting FWD/BWD --\> inclining the mast for maneuvering the spreader and shifting the load moment. Power Pile Slope --\> inclinate the spreader for maneuvering the spreader on the container. Spreader extend/retract --\> It need to pick up 20 ft aswell as 40 ft containers, on picture above the spreader is extended.\
-Side Shift left/right --\> possibility to shift the spreader to the left or right for maneuvering on the container TwistLock lock/unlock --\> Twislocks are used to lock unlock containers
+The scope is for one truck only for this project. There are no experts within the company on truck data. There is no GDPR information within this dataset, and the data is owned by the Hyster.
+
+## Describe Data
+
+The collected data includes variables such as engine RPM, fuel consumption, speed, activity type (loading, unloading, driving, idling). The data is stored in MDF4 format. The data includes timestamps for each data point, allowing for analysis over time.
+
+Signals:
+
+* Lift_Height: RAW height of the spreader [mm] has to be multiplied by 2 to get the correct value
+
+* Vehicle_speed: Speed of the truck [km/h] Engine_Speed Engine rpm[rpm]
+
+* AccelPedalPos Accelerator pedal [%] 0 no throttle, 100 is wide open throttle
+
+* Hoist_Percentage Percentage of Hoist lever (or joystick) Engine_Actual_Torq Engine gross torque [%]
+
+* EngPercLoadAtCurrSp Engine load [%]
+
+* NomFrictionPercTorq Torque loss of engine [%]
+
+* FuelRate Diesel used [l/hour]
+
+* Lift_pressure_raw Pressure in hydraulic lift circuit [bar]
+
+* Brake_pressure_raw Pressure in Hydraulic brake circuit [bar]
+
+* lat Latitude from GPS [°]
+
+* lon Longitude from GPS [°]
+
+* Lift_Status Boolean Lift status
+
+* Lower_Status Boolean Lower status
+
+* Tilt_Fwd Boolean Tilt FWD status
+
+* Tilt_Bwd Boolean Tilt BWD status
+
+* PPS_Bwd Boolean PPS BWD status
+
+* PPS_Fwd Boolean PPS FWD status
+
+* Spr_Extend Boolean Spreader extend status
+
+* Spr_Retract Boolean Spreader retract status
+
+* SS_Left Boolean SideShift left status
+
+* SS_Right Boolean SideShift Right status
+
+* TWL_Unlock Boolean Twistlock unlock status
+
+* TWL_Lock Boolean Twistlock lock status
+
+statistics:
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+import numpy as np
+import pandas as pd
+import pickle
+conv_path = r"c:\users\frank\Documents\DME\Eindopdracht_without_raw\data\loaded"
+with open(conv_path + "\E214_A.pkl", "rb") as f:
+    df = pickle.load(f)
+df.describe()
+```
+
+## Explore Data
+
+Data exploration was performed to gain a better understanding of the relationships between variables and energy consumption on the ECH trucks.
+it started with making the truck states. now we can see the average power per truck state:
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+import pandas as pd
+import pickle
+import matplotlib.pyplot as plt
+conv_path = r"c:\users\frank\Documents\DME\Eindopdracht_without_raw\data\Processed"
+with open(conv_path + "\E214_A.pkl", "rb") as f:
+    df = pickle.load(f)
+Total_Eng_nrg = np.max(df["engine_used_energy"])
+Drive_nrg = np.max(df["drive_energy"])
+Hydr_nrg = np.max(df["hydr_energy"])
+Idle_nrg = np.max(df["idle_energy"])
+Work_nrg = np.max(df["working_energy"])
+mean_drive_power = np.mean(df["drive_power"])
+mean_hydr_power = np.mean(df["hydr_power"])
+mean_work_power = np.mean(df["working_power"])
+mean_idle_power = np.mean(df["idle_power"])
+mean_engine_power = np.mean(df.engine_power)
+nrg_list = [Total_Eng_nrg, Drive_nrg, Hydr_nrg, Idle_nrg, Work_nrg]
+nrg_list_rounded = [round(x, 1) for x in nrg_list]
+nrg_n_list = ["Total_Eng_nrg", "Drive_nrg", "Hydr_nrg", "Idle_nrg", "Work_nrg"]
+mean_power = [
+    mean_drive_power,
+    mean_hydr_power,
+    mean_work_power,
+    mean_idle_power,
+    mean_engine_power,
+]
+mean_power_n = [
+    "mean_drive_power",
+    "mean_hydr_power",
+    "mean_work_power",
+    "mean_idle_power",
+    "mean_engine_power",
+]
+# round values
+mean_power_rounded = [round(x, 2) for x in mean_power]
+# Set graph
+fig, (ax1) = plt.subplots()
+# Set title
+fig.suptitle(" Mean Power per truck state")
+# figure size
+fig = plt.figure(figsize=(15, 5))
+# plot
+ax1.barh(mean_power_n, mean_power, align="center")
+# Set backgound color
+ax1.set_facecolor("lightgrey")
+# set label
+ax1.set_xlabel("Average power [Kw]")
+# plot values on edge of bar
+ax1.bar_label(
+    ax1.containers[0], labels=mean_power_rounded, label_type="edge", fontsize=12
+)
+# remove values x-axis
+ax1.set_xticklabels([])
+plt.show()
+```
+Now show the total used energy over this dataset per truck state:
+
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+import pandas as pd
+import pickle
+import matplotlib.pyplot as plt
+# Set graph
+fig, (ax1) = plt.subplots()
+# Set title
+fig.suptitle("Total used energy per truck state [KW/h]")
+# figure size
+fig = plt.figure(figsize=(15, 5))
+# plot
+ax1.barh(nrg_n_list, nrg_list, align="center")
+# Set backgound color
+ax1.set_facecolor("lightgrey")
+# set label
+ax1.set_xlabel("Energy used Kw/h")
+# plot values on edge of bar
+ax1.bar_label(
+    ax1.containers[0], labels=nrg_list_rounded, label_type="edge", fontsize=12
+)
+ax1.set_xticklabels([])
+plt.show()
+```
+Check if the drive + hydraulic + idle energy come close to the total the engine energy.
+
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+import numpy as np
+total_energy = np.max(df.drive_energy) + np.max(df.hydr_energy) + np.max(df.idle_energy)
+print(f"Total power of drive hydraulic and idle {round(total_energy,2)} [Kw/h]")
+print(f"Engine total power {round(np.max(df.engine_used_energy),2)} [Kw/h]")
+print(f"difference {round(total_energy-np.max(df.engine_used_energy),2)}[Kw/h]")
+```
+
+
+Now we know where the energy goes to let’s  see if we can see correlation between used energy and other signals.
+
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+import seaborn as sns
+SELECTION_LIST = [
+    "accelpedal_pos",
+    "vehicle_speed",
+    "hoist_percentage",
+    "fuel_rate",
+    "engine_power",
+    "lift_pressure_raw",
+    "brake_pressure_raw",
+    "lift_height",
+    "lifted_load",
+    "drive_only",
+    "hydr_only",
+    "engine_idle",
+    "truck_idle",
+    "hydr_active",
+    "working",
+]
+TRUCK_STATE_LIST = [
+    "vehicle_speed",
+    "fuel_rate",
+    "engine_power",
+    "drive_only",
+    "hydr_only",
+    "engine_idle",
+    "truck_idle",
+    "hydr_active",
+    "working",
+]
+SELECTION_DRIVE = [
+    "accelpedal_pos",
+    "accelp_rate",
+    "vehicle_speed",
+    "fuel_rate",
+    "engine_power",
+    "lift_pressure_raw",
+    "brake_pressure_raw",
+    "lift_height",
+    "lifted_load",
+]
+SELECTION_HYDR = [
+    "accelpedal_pos",
+    "vehicle_speed",
+    "hoist_percentage",
+    "hoist_rate",
+    "fuel_rate",
+    "engine_power",
+    "lift_pressure_raw",
+    "brake_pressure_raw",
+    "lift_height",
+    "lifted_load",
+    "hoist_active",
+    "tilt_active",
+    "PPS_active",
+    "SS_active",
+    "spr_ext_ret",
+    "TWL_active",
+]
+# Remove rows with idle
+df_run = df.copy()
+df_run = df_run[df_run["truck_idle"] == False]
+# Driving cut
+df_drive = df.copy()
+df_drive = df_drive[df_drive["drive_only"] == True]
+# Hydr cut
+df_hydr = df.copy()
+df_hydr = df_hydr[df_hydr["hydr_only"] == True]
+# sub selection
+df_plot = df.loc[:, SELECTION_LIST]
+df_state = df.loc[:, TRUCK_STATE_LIST]
+df_drive_plot = df_drive.loc[:, SELECTION_DRIVE]
+df_hydr_plot = df_hydr.loc[:, SELECTION_HYDR]
+corr = df_plot.corr()
+# Draw a heatmap with the numeric values in each cell
+f, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(corr, fmt=".1f", linewidths=0.1, cmap="coolwarm", annot=True, ax=ax)
+ax.set_title("Correlation heatmap of complete dataset")
+plt.show()
+```
+ It looks like there is no strong correlation between engine power and any other signal, or fuel rate and other signals. fuel rate and engine power only correlate to each other, which makes sense. there is a small correlation on hoist percentage and the accelerator pedal. Another observation is that the idle energy is ranked second on biggest consumers, but have a negative correlation. 
+
+Let's isolate drive and hydraulic.
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+corr = df_drive_plot.corr()
+# Draw a heatmap with the numeric values in each cell
+f, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(corr, fmt=".1f", linewidths=0.1, cmap="coolwarm", annot=True, ax=ax)
+ax.set_title("Correlation heatmap drive only")
+plt.show()
+```
+
+Somehow all correlations with engine energy seem to disappear.
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+corr = df_hydr_plot.corr()
+# Draw a heatmap with the numeric values in each cell
+f, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(corr, fmt=".1f", linewidths=0.1, cmap="coolwarm", annot=True, ax=ax)
+ax.set_title("Correlation heatmap while Hydraulic only")
+plt.show()
+```
+On the hydraulic correlation plot can be seen that accelerator pedal has a small correlation, and hoist percentage have a correlation.
+
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+corr = df_state.corr()
+# Draw a heatmap with the numeric values in each cell
+f, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(corr, fmt=".1f", linewidths=0.1, cmap="coolwarm", annot=True, ax=ax)
+ax.set_title("Correlation heatmap truck state")
+plt.show()
+```
+On the truck state correlation plot it becomes visable that idle has the hydraulic state has the biggest impact on the energy usage.
+
+Taking all correlation heatmaps in account the only two signals that have a small correlation is  the accelerator pedal and the hoist percentage input from the joystick.
+
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | label: FacetGrid Accelpedal_pos and Hoist % against used energy
+# distribution Acell pedal
+g = sns.FacetGrid(df, col="truck_state")
+g.map(sns.scatterplot, "accelpedal_pos", "engine_power", alpha=0.7, marker="+")
+# distribution Hoist
+g = sns.FacetGrid(df, col="truck_state")
+g.map(sns.scatterplot, "hoist_percentage", "engine_power", alpha=0.7, marker="+")
+```
+The most important one is that can be seen is in the hydraulic state accelerator pedal, the staight lines at 20% and 60% are from the auto rev-up, the rev-up function is also using the accelpedal_pos for revinging up the engine. The vertical line on 100% can be explained by when the rev-up isn't fast enough the operator uses the accelerator pedal to get even more speed.
+
+Anoter finding from this graph is that during the idle state there are still samples of accelpedal_pos. truck idle is defined as engine idle and driving and hydraulic are true. Which means that the all the not 0 values in this graph are situations where the truck is standing agains an object and pushing against it (bulldosering). Which can be seen as abuse.
+
+
+## Verify Data Quality
+
+There was no missing data in this dataset in the form of NAN values, the only thing that needs to be cleaned are the 0 values of the engine speed.
+
+Because it is all sensor data, duplicates don't form an issue.
+
+As this project is purely exploratory actuality of the data is not a big issue, in the end it is about the duty cycle of the costumer and in this case of one truck. It will be more of importance when The data is from the end of January beginning of February. 
+
+The accuracy depends per sensor or controller. Defining the accuracy of every signal is a project on itself and thus is not included in this chapter.
 
 # Data preparation
 
-# Modeling
+In the Data Preparation stage of the CRISP-DM process, we prepare the data for analysis by selecting and cleaning it. In this chapter, we will discuss the steps we took to select and clean the data for our project.
+
+## Select data
+
+The data collection that was retrieved from the server had 289 signals(without timestamps). In the first loading step this number is reduced to 27 signals. these 27 signals are selected because they contain all the signals to determine engine power and truck output/functions.
+
+The purpose of this project is not to determine engine efficiency, the choice was made to excluded temperature, after-treatment, engine sensor data, duplicated and error codes signals.
+
+The data is timeseries data, and was logged in different sample rates(varying between 1 and 100Hz), the sample rates are depending on the sensors or controllers that are sending the data out. And stored in MDF4 (mf4) format (a vector datalogging standard). The collected data includes numeric variables, as well as timestamps for each data point.
+
+## Clean data
+
+There where no nan's in the dataframe. While categorizing the data the discovery was made that there where more then 10000 NoState values, which was to much for a dataframe of 56346 samples. 
+
+This was solved by the function no_state in categorize.py. This function looks if all the other states are not active and makes the NoState value only when the engine RPM is above 0 RPM. 
+
+If this isn't the case the state will be drop, these rows will be dropped in the preprosses module. In the case the truck went off, the the logger continues for 30 minutes. This causes the excess of NoState values. After solving this issue the NoState values where acceptable:
+
+```{python}
+# | code-fold: true
+# | column: screen-inset
+# | style="text-align": center
+import pandas as pd
+import pickle
+conv_path = r"c:\users\frank\Documents\DME\Eindopdracht_without_raw\data\Processed"
+with open(conv_path + "\E214_230128.pkl", "rb") as f:
+    df_0128 = pickle.load(f)
+count = df_0128["truck_state"].value_counts()["NoState"]
+print(f"Number of NoState samles {count}")
+print(f"Total samples df {len(df_0128)}")
+```
+
+## Data construction
+
+To extract meaningful insights and build accurate models, it is crucial to construct the required features from the raw data. This chapter describes the process of constructing relevant features from the selected signals, and how they are calculated to obtain critical parameters like engine torque, power, energy, and lifted load.
+
+#### Engine torque
+
+The engine torque is broadcasted as a percentage. For calculating the engine power the absolute value is needed in Newton meter. The absolute engine torque is calculated as following: $$ (EngineActualTorq-NomFrictionPercTorq)*Reference torque $$
+
+#### Engine power
+
+Engine power is calculated as following: $$ AbsEngineTorque*(EngineSpeed*2*PI/60)/1000 $$ The "engine_speed" is converted from revolutions per minute (RPM) to radians per second by multiplying with 2 \* pi / 60. The division by 1000 is used to convert the result from watts to kilowatts.
+
+#### Engine energy
+
+Engine energy is using the engine_power column. It then uses the cumulative_trapezoid method from the scipy.integrate module to integrate these power values with respect to time. The initial=0 argument specifies the starting value for the integration. The resulting values are then divided by 3600 to convert the units from joules to kilowatt hours (KWh) $$  \int_{Tstart}^{Tstop} EnginePower\,dx   $$
+
+#### Lifted load
+
+Lifted load is not in the dataset, but it can be calculated from the lift pressure. $$ LiftPressure*10*PistonArea/1000 $$
+
+Liftpressure is converted from Bar to Mpascal, and divided by 1000 to get Tons instead of Kg.
+
+#### Accelrates
+
+this was not used after exploration. $$a(t) = \frac{p(t+\Delta t) - p(t)}{\Delta t} $$
+
+#### Categorize.py
+
+The categorize module returns a array called truck_state. Truck_state is a signal that contains a string with the operational state of the truck. values of categorize:
+
+-   **idle**: When the truck is standing is standing still, hydraulic inactive and engine rpm is between 500 and 900 rpm
+
+-   **Driving**: when vehicle speed is above 0.5 km/h and hydraulic is inactive
+
+-   **Hydraulic**: When hydraulic function is used and truck is not driving
+
+-   **Working**: When driving and hydraulic are active at the same time.
+
+-   **No state**: state is not defined and engine rpm > 0
+
+-   **Drop**: if none of the above states are true, these rows will be dropped
+
+To make it possible to split Hydraulic, the hydraulic active array was made. The Hydraulic active signal is a boolean signal that is 1 when hydraulic is used and 0 when not used. Signals for steering, and hydraulic accumulator charge are missing, and so not included in Hydraulic active. The brake pressure signal isn't included as well, the assumption is that this are very short events and may interfere with the output of the joystick. The goal of this signal is to capture when the operator is activating functions on the truck, in retrospect Hydraulic active was maybe not the best naming for it.
+
+#### power_split.py
+
+The powersplit module's goal is to divide power/energy between the states defined in categorize.
+
+## Integrate data
+
+The data files are readed in per day but are converted to one big pandas dataframe. During the exploration phase and on the dashboard, the loose day files are utilized for analysis. However, the ultimate objective is to obtain insights from the entire dataset as it provides a more comprehensive understanding of the data.
+
 
 # Evaluation
+
+In this chapter, the evaluation of results from the project is discussed. Key areas of energy consumption in a truck are identified, and the impact of different signals on energy consumption is analyzed. The analysis shows that driving and idle states are the primary areas of energy consumption, while hydraulic and working states follow. To optimize energy consumption, it is suggested that hydraulic and driving states be optimized, and idle time be reduced through operational planning. The possibility of implementing a gamification strategy on an empty container handler to reduce energy usage is also explored, but no definitive conclusion can be drawn due to insufficient research and modeling. Additionally, the review process of the project is discussed, highlighting the impact of scope creep and time constraints on the project's outcome.
+
+## Evaluate results
+
+- 1.  What are the key areas of energy consumption in a truck, and which signals have the strongest impact on energy consumption?
+
+    Driving and idle states are the primary areas of energy consumption, which was expected. With idle accounting for 33% of total energy usage, and driving accounting for 48%. It should be noted, that this data may not be representative of all ECH trucks due to the limited sample size. Nevertheless, this data could be used as a starting point for larger-scale analysis if deployed on a server.
+
+- 2. What is the correlation between different signals and the energy usage of each system?
+
+    During the data analysis phase, it was observed that there is a slight correlation between the accelerator pedal and hoist lever and overall hydraulic usage.
+    Based on this finding, it was anticipated that the project would enable a more detailed investigation into hydraulic usage and driving states. 
+
+    -   Idle
+
+        The second largest enery using state is idling, as a manufacture it is quite a challege to have an impact on this. There is an option which shut-down the truck if it is idling longer then a certain amount of time, but not all customers want this option. It will then come down to the operational planning of the site where the truck operates. 
+
+    -   Driving
+
+        Driving was the state which consumed the most engine energy. To make a statement on this, we have to look at output work vs drive power. due time constains it wan's possible anymore to do it in this project.
+
+    -   Hydraulic
+
+        The hydrauilic state was the third in line of energy users.
+        We oserved that the rev-up had an impact, and when the rev-up isn't fast enough the operator uses the accelerator pedal to get even more speed.
+
+        In the graph below (Cummins_QQsb67_Specsheet) can be seen that 1800 rpm is a good rpm using for rev-up. The stategy on rev- right now is sending an accelped_pos percentage to the engine, which revs-up the engine. Doing this this way doesn't ensure that the rpm doesn't undershoot or overshoot, it also doesn't take the hydraulic load in account.
+        There is room for improvement here.
+
+    -   Working
+
+        If there is energy improvement gained on drive and hydraulic working wil also gain energy improvement. As working is a combination from hydraiulic and driving 
+    
+![Cummins_QSB67_Specsheet](Cummins_QSB67_ConsChart.png)
+
+- 3.How can energy usage be optimized to reduce consumption and improve efficiency?
+
+    Hydraulic:One way to to improve the rev-up strategy by taking the hydraulic load into account, rather than just relying on the accelerator pedal. Additionally, further investigation into hydraulic usage and driving states could provide more detailed insights and opportunities for improvement.
+
+    Driving: Driving consumes the most engine energy, so it is important to optimize this state as well. While it was not possible to do a detailed analysis in this project, it may be helpful to look at output work vs drive power to make further optimizations.
+
+    Idle: Idling is the second largest energy user, but it may be challenging to have an impact on this state. One option is to implement a shut-down feature for trucks that idle for too long, but this may not be feasible for all customers. Operational planning of the site where the truck operates could also help reduce idle time.
+
+    Working: Energy improvement gained from optimizing hydraulic and driving states will also result in energy improvements for working, which is a combination of hydraulic and driving states. Therefore, any optimizations made to these two states will also benefit working.
+
+
+- Can the implementation of a gamification strategy on an empty container handler lead to a reduction in energy usage?
+
+Currently, I am unable to make a definitive statement on whether implementing a gamification strategy on an empty container handler would result in a reduction in energy usage. This is because the suggestions have not been researched or modeled, and therefore, I cannot provide a specific number on the potential energy reduction. However, there are various topics that we can explore to assess the potential impact of such a strategy.
+
+## Review process
+
+During the initial stages of the project, my expectation was to develop a comprehensive gamification strategy by the time the project was completed. However, after conducting the data exploration phase, it became clear that the project was more complex than initially anticipated. In hindsight, two of the risks identified in the risk assessment chapter, scope creep and time constraints, had a significant impact on the project's outcome. The exploration phase took longer than expected, leaving insufficient time to complete the remaining tasks. In the final two weeks, I encountered code issues that required a considerable amount of time to resolve, further contributing to the time constraints. 
+
+## Determine next steps
+
+See deployment
+
+# Deployement
+
+The results of this project can be deployed on the data server hyster is running. This server is hosted on Ubuntu and includes both InfluxDB and Grafana for data storage and visualization, respectively. Preprocessing happens with python script before the data gets injected into influx db. It is possible to make fictive signals to see the difference in the current energy usage, and the fictive energy usage, using the insights of this project. Doing this it means that we could do the analysis over multiple trucks and over a 2 year time range. If we can see on the dashboards the functionality is working as expected we can even implement it on trucks.
+
+## Plan deployment
+
+Before the project can be deployed there are a few things we should take in account:
+
+#### Technical
+
+First of all, the code setup must be more generic. This because different trucks produce different signals, and have different properties. For electric trucks the code/models should also chance because they have the ability to regenerate from braking and sometimes also with lowering. 
+The dashboard interface should change, as grafana works quite different as streamlit. Performance is also key, especially if we want to query data over a bigger time range. 
+
+#### Organizational
+
+Somebody has to be responsible for maintenance. Because trucks are continuously  changing, especially on the electric trucks which still have low maturity levels. In extreme case it could be that more data is produce and if that is the case it is also important to take the budget in account.
+
+## Plan monitor and maintenance
+
+The biggest risk is change on can signals, this can already change after a software update on the truck. To monitor this it is possible to send a mail from grafana when a certain signal is missing. Grafana is also capable of sending a mail when a signal crosses a threshold. 
+
+Planning maintenance  is always a challenge because the trucks are running world wide, over multiple time zones. Also a lot of the customers are working in multiple shifts. The upside is that the dashboards are now only used for engineering purpose, so if something goes down it does not affect the customer.
+
+# Attachements
+
+## Terminology
+
+This chapter defines key terms and concepts relevant to the project.
+
+### Lift truck
+
+A lift truck, also known as a forklift, is a type of powered industrial truck used to lift and move materials over short distances. It typically features a forked platform that can be raised and lowered for loading and unloading.
+
+### Empty Container Handler (ECH)
+
+An empty container handler is a type of lift truck specifically designed for handling empty shipping containers. It typically features a spreader attachment that can lift and move containers, and may have other specialized features to improve efficiency and safety.
+
+Functions on a ECH:
+
+-   Lifting/ lowering: move the load vertically.
+
+-   Tilting FWD/BWD: inclining the mast for maneuvering the spreader and shifting the load moment.
+
+-   Power Pile Slope: incline the spreader for maneuvering the spreader on the container.
+
+-   Spreader extend/retract: It need to pick up 20 ft as well as 40 ft containers, on picture above the spreader is extended.
+
+-   Side Shift left/right: possibility to shift the spreader to the left or right for maneuvering on the container.
+
+-   TwistLock lock/unlock: Twislocks are used to lock unlock containers
+
+### Spreader
+
+A spreader is an attachment that is mounted on the front of a lift truck or empty container handler, and is used to lift and move cargo or containers. It typically consists of a pair of arms that can be adjusted to grip and hold the load securely.
+
+### Twist Locks
+
+Twist locks are locking mechanisms that are used to secure shipping containers to a lift truck or other transportation vehicle. They consist of a rotating head that can be twisted to engage or disengage a locking pin on the container
+
+### ICE
+
+ICE stands for internal combustion engine, which is a type of heat engine that uses combustion of a fuel to generate power. Lift trucks and empty container handlers typically use ICEs to power their hydraulic systems and drive trains.
+
+
+### Lift auto rev-up 
+Lift auto rev-up refers to a feature in lift trucks that automatically increases the engine speed when the load on the forks is raised to a certain height. This helps maintain power and performance as the load gets heavier and reduces the likelihood of stalling or bogging down the engine.
+
+
+### Nominal friction percent torque 
+Nominal friction percent torque is a measure of the amount of torque required to overcome the friction in the lift truck's drivetrain when it is not under load. This value is used as a baseline for determining how much additional torque is required to lift a load, and it can vary depending on factors such as the weight of the truck, the type of tires, and the condition of the drivetrain.
+
+
+### Joystick 
+In the context of a lift truck, a joystick is a hand-held control device that is used to manipulate the position of the forks and other attachments. The joystick typically has several buttons and levers that allow the operator to control the direction, speed, and height of the lift, as well as other functions such as tilting and rotating the forks. The joystick is an essential component of the lift truck's control system and must be operated with care and precision to ensure safe and efficient operation. 
+
+### Gamification
+
+Gamification is the use of game design elements and principles in non-game contexts to engage and motivate users. In the context of this project, gamification may be used to encourage lift truck operators to adopt more energy-efficient behaviors, such as reducing idle time or minimizing unnecessary movements.
+
+### Energy Consumption
+
+Energy consumption refers to the amount of energy used by the trucks during operation. This includes the use of fuel or electricity to power the trucks and any other equipment used during operation.
+
+### Data Logger
+
+A data logger is a device that records data from various sensors and sources, such as the truck's engine, transmission, and other systems. The data logger used in this investigation will be used to record energy consumption data from the ECH trucks.
+
+### Sensors
+
+Sensors are devices used to measure and record various data points, such as temperature, pressure, and speed. In this investigation, sensors will be used to measure energy consumption and other relevant data points from the ECH trucks.
+
+### CAN Data
+
+CAN (Controller Area Network) data refers to data transmitted between various electronic systems on the ECH trucks. This data can be collected and analyzed to gain insight into the trucks' energy consumption and other relevant metrics.
+
+By using these terms consistently throughout the investigation, we can ensure clear communication and understanding of the findings and recommendations related to energy consumption on ECH trucks.
+
+### mdf4 files 
+MDF4 (Measurement Data Format 4) is a binary file format commonly used for storing and exchanging time-series data, particularly in the automotive and transportation industries. MDF4 files can contain measurement data, calibration data, metadata, and other information related to the measurement and analysis of physical systems.
+
+The MDF4 file format supports the storage of large volumes of time-series data, with high resolution and accuracy. It also provides a flexible and extensible data model, allowing users to define custom data structures and signals. MDF4 files can be read and processed by various software tools, such as MATLAB, Python, and specialized data analysis tools for the automotive industry.
+Footer
