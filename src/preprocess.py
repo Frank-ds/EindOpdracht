@@ -1,116 +1,77 @@
-from settings import settings
-import categorize
-import power_split
-import merge
-import pickle
-import pandas as pd
-import numpy as np
-import scipy.integrate as integrate
-import os
-from datetime import datetime
+import pydantic
+from asammdf import MDF
 from pathlib import Path
-
-PROCESSED_PATH = settings.processed_path
-LOADED_PATH = settings.loaded_path
-COMBI_FILE_NAME = LOADED_PATH.joinpath("E214_A.pkl")
-
-REF_TORQUE = settings.REF_TORQUE
-PISTON_DIAM_CM = settings.PISTON_DIAM_CM
-PISTON_AREA = settings.PISTON_AREA_CM2
+import numpy as np
 
 
-def seconds(df):
-    """Make a second series to integrate on"""
-    df["seconds"] = np.arange(0, len(df.index), 1)
-    return df
+class _Settings(pydantic.BaseSettings):
+    base_dir: Path = Path(__file__).parents[1]
+    data_dir: Path = base_dir / "data"
+    data_raw_dir: Path = data_dir / "RAW"
+    loaded_path: Path = data_dir / "loaded"
+    processed_path: Path = data_dir / "Processed"
+    resample_freq_Hz: float = 1.0
+    # signal selection
+    FILTER_LIST = [
+        "TCU_CCVS_Wheelbasedvehiclespeed",
+        "HS_Lift_Height",
+        "ECM_EEC1_Engine_Speed",
+        "ECM_EEC2_AccelPedalPos1",
+        "ECM_EEC1_Engine_Actual_Eng_Torqu",
+        "ECM_EEC2_EngPercLoadAtCurrSpd",
+        "ECM_EEC3_NomFrictionPercTorq",
+        "ECM_LFE1_FuelRate",
+        "JOY_BJM1_Hoist_Percentage",
+        "GPS_latitude",
+        "GPS_longitude",
+        "GPS_speed",
+        "GPS_altitude",
+        "PS_Pressure_Sensor_Lift",
+        "PS_Sensor_Brake",
+        "JOY_BJM1_Hoist_Lift_Status",
+        "JOY_BJM1_Hoist_Lower_Status",
+        "JOY_BJM1_Tilt_Forward_Status",
+        "JOY_BJM1_Tilt_Backward_Status",
+        "JOY_EJM1_PileSlope_Back_Status",
+        "JOY_EJM1_PileSlope_Fwd_Status",
+        "JOY_BJM1_Spreader_Extend",
+        "JOY_BJM1_Spreader_Retract",
+        "JOY_BJM1_Spreader_SideShiftLeft",
+        "JOY_BJM1_Spreader_SideShiftRight",
+        "JOY_BJM1_Spreader_Twist_Unlock",
+        "JOY_BJM1_Spreader_Twistlock_Lock",
+    ]
+    COMMON_NAME = {
+        "HS_Lift_Height": "lift_height",
+        "TCU_CCVS_Wheelbasedvehiclespeed": "vehicle_speed",
+        "ECM_EEC1_Engine_Speed": "engine_speed",
+        "ECM_EEC2_AccelPedalPos1": "accelpedal_pos",
+        "JOY_BJM1_Hoist_Percentage": "hoist_percentage",
+        "ECM_EEC1_Engine_Actual_Eng_Torqu": "engine_actual_torq",
+        "ECM_EEC2_EngPercLoadAtCurrSpd": "EngPercLoadAtCurrSp",
+        "ECM_EEC3_NomFrictionPercTorq": "NomFrictionPercTorq",
+        "ECM_LFE1_FuelRate": "fuel_rate",
+        "PS_Pressure_Sensor_Lift": "lift_pressure_raw",
+        "PS_Sensor_Brake": "brake_pressure_raw",
+        "GPS_latitude": "lat",
+        "GPS_longitude": "lon",
+        "JOY_BJM1_Hoist_Lift_Status": "lift_status",
+        "JOY_BJM1_Hoist_Lower_Status": "lower_status",
+        "JOY_BJM1_Tilt_Forward_Status": "tilt_fwd",
+        "JOY_BJM1_Tilt_Backward_Status": "tilt_bwd",
+        "JOY_EJM1_PileSlope_Back_Status": "PPS_bwd",
+        "JOY_EJM1_PileSlope_Fwd_Status": "PPS_fwd",
+        "JOY_BJM1_Spreader_Extend": "spr_extend",
+        "JOY_BJM1_Spreader_Retract": "spr_retract",
+        "JOY_BJM1_Spreader_SideShiftLeft": "SS_left",
+        "JOY_BJM1_Spreader_SideShiftRight": "SS_right",
+        "JOY_BJM1_Spreader_Twist_Unlock": "TWL_unlock",
+        "JOY_BJM1_Spreader_Twistlock_Lock": "TWL_lock",
+    }
+    # meta data
+    REF_TORQUE = 1030  # cummin spec sheet  QSB 6.7 tier 4f
+    PISTON_DIAM_CM = 12.5
+    PISTON_AREA_CM2 = ((PISTON_DIAM_CM**2) * np.pi) / 8  # dev 8 for 2 cilinders
 
 
-def lift_load(df):
-    """load on the forks in Tons"""
-    df["lifted_load"] = 10 * df.lift_pressure_raw * PISTON_AREA / 10000  # in Tons
-    return df
-
-
-def drop_lines_wo_state(df):
-    """drop values when category is has no state and enginespeed is 0"""
-    df = df.drop(df[df.truck_state == "drop"].index)
-    return df
-
-
-def accel_rates(df):
-    """calculate accped and Joystick rate"""
-    df["accelp_rate"] = np.gradient(df.accelpedal_pos, df.seconds)
-    df["hoist_rate"] = np.gradient(df.hoist_percentage, df.seconds)
-    return df
-
-
-def preprocess():
-    """apply all preprocess functions and write to a pickle file"""
-    for file in LOADED_PATH.glob("*"):
-        try:
-            with open(file, "rb") as f:
-                df = pickle.load(f)
-        except FileNotFoundError:
-            print(f"file not found{file}")
-            continue
-
-        df = seconds(df)
-        df = lift_load(df)
-        df = accel_rates(df)
-        df = categorize.hydraulic_active(df)
-        df = categorize.categorize(df)
-        df = drop_lines_wo_state(df)
-        df = power_split.power_split(df)
-        df = power_split.energy_split(df)
-        write_to_pickle(file, df)
-
-
-def write_to_pickle(file, df):
-    try:
-        with open(PROCESSED_PATH / file.name, "wb") as f:
-            pickle.dump(df, f)
-            print(f"preprocessed file {file.name} ")
-
-    except:
-        print("failed to make a pickle file")
-
-
-# def merge_pickles(dir_path: str, output_file: str) -> None:
-#     """
-#     Merge all .pkl files in a directory into a single .pkl file.
-
-#     Args:
-#     dir_path (str): The path to the directory containing the .pkl files.
-#     output_file (str): The name of the output .pkl file.
-
-#     Returns:
-#     None
-#     """
-#     # Convert input arguments to Path objects
-#     dir_path = Path(dir_path)
-#     output_file = Path(output_file)
-
-#     files = list(dir_path.glob("*.pkl"))
-#     merged_df = pd.DataFrame()
-
-#     for file in files:
-#         try:
-#             with open(file, "rb") as pkl_file:
-#                 print(f"Opening {file}...")
-#                 file_df = pd.read_pickle(pkl_file)
-#         except:
-#             print(f"Error: Could not load file {file}. Skipping...")
-#             continue
-#         if not isinstance(file_df, pd.DataFrame):
-#             print(f"Error: File {file} does not contain a DataFrame. Skipping...")
-#             continue
-#         merged_df = pd.concat([merged_df, file_df], axis=0)
-
-#     merged_df = merged_df.sort_index()
-#     merged_df.to_pickle(output_file)
-#     print(f"Combined {len(files)} files into {output_file}")
-#     print(f"Saved merged file to {output_file.resolve()}")
-
-
-if __name__ == "__main__":
-    print("Data loading module not intended as main")
+settings = _Settings()
