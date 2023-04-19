@@ -72,4 +72,3 @@ def filter_mdf(file):
 
 if __name__ == "__main__":
     print("Data loading module not intended as main")
-
