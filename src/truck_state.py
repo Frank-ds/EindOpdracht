@@ -1,4 +1,4 @@
-iimport pandas as pd
+import pandas as pd
 
 
 def Func_Active(f1, f2):
